@@ -1,6 +1,7 @@
 from telethon import TelegramClient, events
 import sqlite3
 import webvuotlink
+import taolink
 #api telegram
 api_id = '20654149'
 api_hash = '4422cfbd1810967f6a54c06cd0120fdc'
@@ -13,22 +14,24 @@ sqluserform = 'INSERT INTO users (uid, money) VALUES (?, ?)'
 #link
 finallink = {}
 finalmoney = {}
-f = open('links.txt').readlines()
-for line in f:
-    line = line.replace("\n","")
-    line = line.split("|")
-    finallink[line[1]] = line[0]
-    money = int(line[2])
-    finalmoney[line[1]] = money
-#lay view cac link luc dau
-webvuotlink.login_again('8link')
-webvuotlink.login_again('yeumoney')
-webvuotlink.login_again('1short')
-webvuotlink.login_again('uptolink.cloud')
 view = {}
-for code in finallink:
-    link = finallink[code]
-    view[link] = int(webvuotlink.check_link(link))
+def update_link():
+    f = open('links.txt').readlines()
+    for line in f:
+        line = line.replace("\n","")
+        line = line.split("|")
+        finallink[line[1]] = line[0]
+        money = int(line[2])
+        finalmoney[line[1]] = money
+    #lay view cac link luc dau
+    webvuotlink.login_again('8link')
+    webvuotlink.login_again('yeumoney')
+    webvuotlink.login_again('1short')
+    webvuotlink.login_again('uptolink.cloud')
+    for code in finallink:
+        link = finallink[code]
+        view[link] = int(webvuotlink.check_link(link))
+update_link()
 #client
 client = TelegramClient('session_name', api_id, api_hash)
 
@@ -36,6 +39,7 @@ client = TelegramClient('session_name', api_id, api_hash)
 @client.on(events.NewMessage)
 async def code_handle(event):
     if event.message.message.startswith('/nhapma '):
+        
         code = event.message.message.replace('/nhapma ','')
         if code not in finallink:
             text = 'Bạn đã nhập sai code, vui lòng xem code code của mình'
@@ -132,7 +136,7 @@ async def get_task(event):
 
 #account
 @client.on(events.NewMessage(pattern='/account'))
-async def get_account(event):
+async def get_account(event):  
     chat = await event.get_chat()
     uid = chat.id
     cursor.execute(f'SELECT * FROM users WHERE uid={uid}')
@@ -162,9 +166,9 @@ async def withdraw(event):
     user = (uid,money)
     cursor.execute(sqluserform,user)
     conn.commit()
-    await event.respond(text)
+    await event.respond(text)   
     
-    
+
 #addmoney
 @client.on(events.NewMessage(pattern='/addmoney '))
 async def add_money(event):
@@ -241,5 +245,53 @@ async def get_view(event):
         _view = view[finallink[code]]
         text = text + f'link: {link} ,view: {_view}.\n'
     await event.respond(text)
+
+#update_link
+@client.on(events.NewMessage(pattern='/updatelink'))
+async def updatelink(event):
+    await event.respond("Đang update link...")
+    update_link()
+    await event.respond("Đã update xong")
+
+#newlink
+@client.on(events.NewMessage(pattern='/newlink '))
+async def new_link(event):
+    message = event.message.text
+    message = message.replace("/newlink ","")
+    message = message.split(" ")
+    for text in message:
+        text = text.split(",")
+        number = text[1]
+        money = text[2]
+        reply = "Đang tạo link web "
+        if "yeumoney" in text[0]:
+            reply = reply + "yeumoney..."
+            await event.respond(reply)
+            taolink.webyeumoney(int(number),int(money))
+            reply = reply.replace("Đang tạo link web ","")
+            reply = "Đã tạo xong link web " + reply
+            await event.respond(reply)
+        elif "8link" in text[0]:
+            reply = reply + "8link..."
+            await event.respond(reply)
+            taolink.web8link(int(number),int(money))
+            reply = reply.replace("Đang tạo link web ","")
+            reply = "Đã tạo xong link web " + reply
+            await event.respond(reply)
+        elif "uptolink.cloud" in text[0]:
+            reply = reply + "uptolink.cloud..."
+            await event.respond(reply)
+            taolink.webuptolink_cloud(int(number),int(money))
+            reply = reply.replace("Đang tạo link web ","")
+            reply = "Đã tạo xong link web " + reply
+            await event.respond(reply)
+        elif "uptolink.io" in text[0]:
+            reply = reply + "uptolink.io..."
+            await event.respond(reply)
+            taolink.webuptolink_io(int(number),int(money))
+            reply = reply.replace("Đang tạo link web ","")
+            reply = "Đã tạo xong link web " + reply
+            await event.respond(reply)
+    taolink.log_link()
 with client:
     client.run_until_disconnected()

@@ -28,12 +28,9 @@ def add_note(title,code):
     return str(json['notenumber'])
 
 links = {}
-def web8link():
-    number = int(input('Nhập số link của web 8link cần tạo:'))
+def web8link(number,money):
     if number == 0:
         return
-    money = int(input('Nhập số tiền của web 8link (đồng):'))
-    print("Đang tạo link...")
     for i in range(number):
         code = '8link'+random_text(10)
         link = "https://anotepad.com/notes/"+add_note(f'code của bạn là:',code)
@@ -42,14 +39,10 @@ def web8link():
         json = response.json()
         link = json["shortened_url"]
         links[link] = (code,money)
-    print("Tạo hoàn tất")
 
-def webyeumoney():
-    number = int(input('Nhập số link của web yeumoney cần tạo:'))
+def webyeumoney(number,money):
     if number == 0:
         return
-    money = int(input('Nhập số tiền của web yeumoney (đồng):'))
-    print("Đang tạo link...")
     for i in range(number):
         code = 'yeumoney'+random_text(10)
         link = "https://anotepad.com/notes/"+add_note('code của bạn là:',code)
@@ -58,15 +51,11 @@ def webyeumoney():
         json = response.json()
         link = json["shortenedUrl"]
         links[link] = (code,money)
-    print("Tạo hoàn tất")
 
 
-def webuptolink_cloud():
-    number = int(input('Nhập số link của web uptolink.cloud cần tạo:'))
+def webuptolink_cloud(number,money):
     if number == 0:
         return
-    money = int(input('Nhập số tiền của web uptolink.cloud (đồng):'))
-    print("Đang tạo link...")
     for i in range(number):
         code = 'uptolink.cloud'+random_text(10)
         link = "https://anotepad.com/notes/"+add_note('code của bạn là:',code)
@@ -75,14 +64,10 @@ def webuptolink_cloud():
         json = response.json()
         link = json["shortenedUrl"]
         links[link] = (code,money)
-    print("Tạo hoàn tất")
 
-def webuptolink_io():
-    number = int(input('Nhập số link của web uptolink.io cần tạo:'))
+def webuptolink_io(number,money):
     if number == 0:
         return
-    money = int(input('Nhập số tiền của web uptolink.io (đồng):'))
-    print("Đang tạo link...")
     for i in range(number):
         code = 'uptolink.io'+random_text(10)
         link = "https://anotepad.com/notes/"+add_note('code của bạn là:',code)
@@ -91,16 +76,11 @@ def webuptolink_io():
         json = response.json()
         link = json["shortenedUrl"]
         links[link] = (code,money)
-    print("Tạo hoàn tất")
 
-web8link()
-webyeumoney()
-webuptolink_cloud()
-webuptolink_io()
+
 def log_link():
     with open('links.txt','w',encoding='utf-8') as f:
         for link in links:
             text = link+'|'+str(links[link][0])+'|'+str(links[link][1])+'\n'
             f.write(text)
 
-log_link()
