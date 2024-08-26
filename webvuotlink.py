@@ -13,7 +13,7 @@ def login_again(webname):
     if webname == '8link':
         try:
             driver.get("https://8link.io/login")
-            time.sleep(3)
+            time.sleep(1)
             username_field = driver.find_element('id','email')
             username_field.send_keys('nhatkiemxuyenmu@gmail.com')
             password_field = driver.find_element('id','inputPassword5')
@@ -28,7 +28,7 @@ def login_again(webname):
     if webname == 'yeumoney':
         try:
             driver.get("https://yeumoney.com/auth/signin.php")
-            time.sleep(3)
+            time.sleep(1)
             username_field = driver.find_element('id','email')
             username_field.send_keys('nhatkiemxuyenmu@gmail.com')
             password_field = driver.find_element('id','matkhau')
@@ -40,7 +40,7 @@ def login_again(webname):
     if webname == '1short':
         try:
             driver.get("https://1short.io/auth/login")
-            time.sleep(3)
+            time.sleep(1)
             username_field = driver.find_element('id','login-email')
             username_field.send_keys('vuotlinktele@gmail.com')
             password_field = driver.find_element('id','login-password')
@@ -52,7 +52,7 @@ def login_again(webname):
     if webname == 'uptolink.cloud':
         try:
             driver.get("https://uptolink.cloud/auth/signin")
-            time.sleep(3)
+            time.sleep(1)
             username_field = driver.find_element('id','username')
             username_field.send_keys('vuotlinktele@gmail.com')
             password_field = driver.find_element('id','password')
@@ -72,25 +72,25 @@ def check_link(link):
         link = link.replace(".click/", "")
         link = 'https://partner.8link.io/shortened-url/'+link
         driver.get(link)
-        time.sleep(3)
+        time.sleep(1)
         view = driver.find_elements(By.CSS_SELECTOR,'p.mb-2')
         return str(view[2].text)
     if 'yeumoney' in link:
         link = link.replace("https://yeumoney.com/","")
         link = 'https://yeumoney.com/quangly/?thongke_link='+link
         driver.get(link)
-        time.sleep(3)
+        time.sleep(1)
         view = driver.find_element(By.CSS_SELECTOR,'.text-right.text-success')
         return str(view.text)
     if '1short' in link:
         driver.get('https://1short.io/client/dashboard')
-        time.sleep(3)
+        time.sleep(1)
         soup = BeautifulSoup(driver.page_source,'html.parser')
         soup = soup.find_all('h2',class_='font-weight-bolder')[1]
         return str(soup.text)
     if 'uptolink.cloud' in link:
         driver.get('https://uptolink.cloud/member/dashboard')
-        time.sleep(3)
+        time.sleep(1)
         view = driver.find_elements(By.CSS_SELECTOR,'tr')[int(datetime.now().strftime("%d"))]
         view = view.text.split(" ")
         return str(view[1])
