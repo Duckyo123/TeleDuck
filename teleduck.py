@@ -229,7 +229,6 @@ async def deduct_money(event):
     conn.commit()
     await event.respond(text)
 
-
 #getview
 @client.on(events.NewMessage(pattern='/getview'))
 async def get_view(event):
@@ -293,5 +292,6 @@ async def new_link(event):
             reply = "Đã tạo xong link web " + reply
             await event.respond(reply)
     taolink.log_link()
+
 with client:
     client.run_until_disconnected()

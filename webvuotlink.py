@@ -94,5 +94,11 @@ def check_link(link):
         view = driver.find_elements(By.CSS_SELECTOR,'tr')[int(datetime.now().strftime("%d"))]
         view = view.text.split(" ")
         return str(view[1])
+    if 'uptolink.io' in link:
+        driver.get('https://uptolink.io.vn/member/dashboard')
+        time.sleep(1)
+        view = driver.find_elements(By.CSS_SELECTOR,'tr')[int(datetime.now().strftime("%d"))]
+        view = view.text.split(" ")
+        return str(view[1])
     return '0'
 
